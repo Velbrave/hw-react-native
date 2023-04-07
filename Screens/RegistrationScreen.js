@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -9,14 +9,35 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
+
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+};
 
 export const RegistrationScreen = () => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [state, setState] = useState(initialState);
+  const [dimensions, setDimensions] = useState(
+    Dimensions.get("window").width - 2 * 2
+  );
+
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width - 2 * 2;
+      setDimensions(width);
+    };
+    const subscription = Dimensions.addEventListener("change", onChange);
+    return () => subscription?.remove();
+  }, []);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+    setState(initialState);
   };
 
   return (
@@ -25,25 +46,35 @@ export const RegistrationScreen = () => {
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-          <View
-            style={{ ...styles.form, marginBottom: isShowKeyboard ? 0 : 100 }}
-          >
+          <View style={{ ...styles.form, width: dimensions }}>
             <Text style={styles.textLogIn}>Registration</Text>
             <TextInput
               style={styles.input}
               placeholder="Name"
+              value={state.name}
               onFocus={() => setIsShowKeyboard(true)}
+              onChangeText={(value) =>
+                setState((prevState) => ({ ...prevState, name: value }))
+              }
             />
             <TextInput
               style={styles.input}
               placeholder="Email"
+              value={state.email}
               onFocus={() => setIsShowKeyboard(true)}
+              onChangeText={(value) =>
+                setState((prevState) => ({ ...prevState, email: value }))
+              }
             />
             <TextInput
               style={styles.input}
               placeholder="Password"
               secureTextEntry={true}
+              value={state.password}
               onFocus={() => setIsShowKeyboard(true)}
+              onChangeText={(value) =>
+                setState((prevState) => ({ ...prevState, password: value }))
+              }
             />
             <TouchableOpacity
               activeOpacity={0.7}
@@ -52,7 +83,11 @@ export const RegistrationScreen = () => {
             >
               <Text style={styles.textBtn}>Register</Text>
             </TouchableOpacity>
-            <Text style={styles.text}>Already have an account? Sign in</Text>
+            <Text
+              style={{ ...styles.text, marginBottom: isShowKeyboard ? 10 : 45 }}
+            >
+              Already have an account? Sign in
+            </Text>
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -65,6 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 219,
     justifyContent: "flex-end",
+    alignItems: "center",
   },
   form: {
     backgroundColor: "#FFFFFF",
@@ -74,7 +110,7 @@ const styles = StyleSheet.create({
   textLogIn: {
     textAlign: "center",
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight: "Roboto-Bold",
     marginTop: 32,
     marginBottom: 32,
   },
@@ -103,13 +139,12 @@ const styles = StyleSheet.create({
   textBtn: {
     fontSize: 16,
     color: "#FFFFFF",
-    fontWeight: "regular",
+    fontWeight: "Roboto-Regular",
   },
   text: {
     textAlign: "center",
     color: "#1B4371",
     fontSize: 16,
-    fontWeight: "regular",
-    marginBottom: 45,
+    fontWeight: "Roboto-Regular",
   },
 });

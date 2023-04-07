@@ -1,24 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 // import { StatusBar } from "expo-status-bar";
 import { RegistrationScreen } from "./Screens/RegistrationScreen";
 import { LoginScreen } from "./Screens/LoginScreen";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  TextInput,
-} from "react-native";
+import { StyleSheet, View, ImageBackground } from "react-native";
+import * as Font from "expo-font";
+// import { AppLoading } from "expo";
+import AppLoading from "expo-app-loading";
+
+export const loadFonts = async () => {
+  await Font.loadAsync({
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+  });
+};
 
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={loadFonts}
+        onFinish={() => setIsReady(true)}
+        onError={(err) => console.log(err)}
+      />
+    );
+  }
   return (
     <View style={styles.container}>
       <ImageBackground
         style={styles.image}
         source={require("./assets/images/images.jpeg")}
       >
-        <LoginScreen />
-        {/* <RegistrationScreen /> */}
+        <RegistrationScreen />
+        {/* <LoginScreen />   */}
       </ImageBackground>
       {/* <StatusBar style="auto" /> */}
     </View>
