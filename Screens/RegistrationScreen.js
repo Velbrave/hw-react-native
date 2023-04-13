@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Dimensions,
+  ImageBackground,
 } from "react-native";
 
 const initialState = {
@@ -18,16 +19,16 @@ const initialState = {
   password: "",
 };
 
-export const RegistrationScreen = () => {
+export const RegistrationScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
   const [dimensions, setDimensions] = useState(
-    Dimensions.get("window").width - 2 * 2
+    Dimensions.get("window").width - 1 * 2
   );
 
   useEffect(() => {
     const onChange = () => {
-      const width = Dimensions.get("window").width - 2 * 2;
+      const width = Dimensions.get("window").width - 1 * 2;
       setDimensions(width);
     };
     const subscription = Dimensions.addEventListener("change", onChange);
@@ -38,58 +39,80 @@ export const RegistrationScreen = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
     setState(initialState);
+    console.log(state);
   };
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        <ImageBackground
+          style={styles.image}
+          source={require("../assets/images/images.jpeg")}
         >
-          <View style={{ ...styles.form, width: dimensions }}>
-            <Text style={styles.textLogIn}>Registration</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Name"
-              value={state.name}
-              onFocus={() => setIsShowKeyboard(true)}
-              onChangeText={(value) =>
-                setState((prevState) => ({ ...prevState, name: value }))
-              }
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={state.email}
-              onFocus={() => setIsShowKeyboard(true)}
-              onChangeText={(value) =>
-                setState((prevState) => ({ ...prevState, email: value }))
-              }
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              secureTextEntry={true}
-              value={state.password}
-              onFocus={() => setIsShowKeyboard(true)}
-              onChangeText={(value) =>
-                setState((prevState) => ({ ...prevState, password: value }))
-              }
-            />
-            <TouchableOpacity
-              activeOpacity={0.7}
-              style={styles.button}
-              onPress={keyboardHide}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <View
+              style={{
+                ...styles.form,
+                marginBottom: isShowKeyboard ? 0 : 100,
+                width: dimensions,
+              }}
             >
-              <Text style={styles.textBtn}>Register</Text>
-            </TouchableOpacity>
-            <Text
-              style={{ ...styles.text, marginBottom: isShowKeyboard ? 10 : 45 }}
-            >
-              Already have an account? Sign in
-            </Text>
-          </View>
-        </KeyboardAvoidingView>
+              <View style={styles.header}>
+                <Text style={styles.headerTitle}>Registration</Text>
+              </View>
+
+              <TextInput
+                style={styles.input}
+                placeholder="Name"
+                value={state.name}
+                onFocus={() => setIsShowKeyboard(true)}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, name: value }))
+                }
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                value={state.email}
+                onFocus={() => setIsShowKeyboard(true)}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, email: value }))
+                }
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                secureTextEntry={true}
+                value={state.password}
+                onFocus={() => setIsShowKeyboard(true)}
+                onChangeText={(value) =>
+                  setState((prevState) => ({ ...prevState, password: value }))
+                }
+              />
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={styles.button}
+                onPress={(keyboardHide, () => navigation.navigate("Home"))}
+              >
+                <Text style={styles.textBtn}>Register</Text>
+              </TouchableOpacity>
+              <View style={styles.navigate}>
+                <Text style={styles.text}>
+                  Already have an account?
+                  <Text
+                    style={styles.textNav}
+                    onPress={() => navigation.navigate("Login")}
+                  >
+                    {" "}
+                    Sign in
+                  </Text>
+                </Text>
+              </View>
+            </View>
+          </KeyboardAvoidingView>
+        </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -98,21 +121,27 @@ export const RegistrationScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 219,
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
     justifyContent: "flex-end",
     alignItems: "center",
   },
   form: {
+    height: 549,
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
-  textLogIn: {
-    textAlign: "center",
+  header: {
+    alignItems: "center",
+    marginTop: 92,
+    marginBottom: 32,
+  },
+  headerTitle: {
     fontSize: 30,
     fontWeight: "Roboto-Bold",
-    marginTop: 32,
-    marginBottom: 32,
   },
   input: {
     borderWidth: 1,
@@ -121,7 +150,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderRadius: 8,
     height: 50,
-    textAlign: "auto",
     marginBottom: 16,
     paddingLeft: 16,
     fontSize: 16,
@@ -141,10 +169,19 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "Roboto-Regular",
   },
+  navigate: {
+    alignItems: "center",
+    marginBottom: 45,
+  },
   text: {
-    textAlign: "center",
     color: "#1B4371",
     fontSize: 16,
+    fontWeight: "Roboto-Regular",
+  },
+  textNav: {
+    color: "red",
+    // color: "#1B4371",
+    fontSize: 18,
     fontWeight: "Roboto-Regular",
   },
 });
