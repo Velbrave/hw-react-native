@@ -6,8 +6,9 @@ import AppLoading from "expo-app-loading";
 
 const loadFonts = async () => {
   await Font.loadAsync({
-    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
-    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    bold: require("./assets/fonts/Roboto-Bold.ttf"),
+    medium: require("./assets/fonts/Roboto-Medium.ttf"),
+    regular: require("./assets/fonts/Roboto-Regular.ttf"),
   });
 };
 

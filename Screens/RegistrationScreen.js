@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 30,
-    fontWeight: "Roboto-Bold",
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   textBtn: {
     fontSize: 16,
     color: "#FFFFFF",
-    fontWeight: "Roboto-Regular",
+    fontWeight: "regular",
   },
   navigate: {
     alignItems: "center",
@@ -176,12 +176,12 @@ const styles = StyleSheet.create({
   text: {
     color: "#1B4371",
     fontSize: 16,
-    fontWeight: "Roboto-Regular",
+    fontWeight: "regular",
   },
   textNav: {
     color: "red",
     // color: "#1B4371",
     fontSize: 18,
-    fontWeight: "Roboto-Regular",
+    fontWeight: "regular",
   },
 });
