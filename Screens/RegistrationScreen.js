@@ -12,9 +12,11 @@ import {
   Dimensions,
   ImageBackground,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { authSignUpUser } from "../Redux/auth/authOperation";
 
 const initialState = {
-  name: "",
+  nickname: "",
   email: "",
   password: "",
 };
@@ -22,6 +24,8 @@ const initialState = {
 export const RegistrationScreen = ({ navigation }) => {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
+  const dispatch = useDispatch();
+
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 1 * 2
   );
@@ -35,15 +39,15 @@ export const RegistrationScreen = ({ navigation }) => {
     return () => subscription?.remove();
   }, []);
 
-  const keyboardHide = () => {
+  const handleSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+    dispatch(authSignUpUser(state));
     setState(initialState);
-    console.log(state);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback onPress={handleSubmit}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.image}
@@ -66,10 +70,10 @@ export const RegistrationScreen = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Name"
-                value={state.name}
+                value={state.nickname}
                 onFocus={() => setIsShowKeyboard(true)}
                 onChangeText={(value) =>
-                  setState((prevState) => ({ ...prevState, name: value }))
+                  setState((prevState) => ({ ...prevState, nickname: value }))
                 }
               />
               <TextInput
@@ -94,7 +98,7 @@ export const RegistrationScreen = ({ navigation }) => {
               <TouchableOpacity
                 activeOpacity={0.7}
                 style={styles.button}
-                onPress={(keyboardHide, () => navigation.navigate("Home"))}
+                onPress={(handleSubmit, () => navigation.navigate("Posts"))}
               >
                 <Text style={styles.textBtn}>Register</Text>
               </TouchableOpacity>
