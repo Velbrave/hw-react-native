@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import useRoute from "./router";
 import AppLoading from "expo-app-loading";
 import { Provider } from "react-redux";
-import { store } from "./Redux/store";
+import { store } from "./redux/store";
 
 const loadFonts = async () => {
   await Font.loadAsync({
